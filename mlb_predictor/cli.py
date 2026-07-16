@@ -13,6 +13,9 @@ def main() -> None:
 
     fetch = sub.add_parser("fetch", help="fetch real data (MLB Stats API, needs network)")
     fetch.add_argument("--seasons", type=int, nargs="+", default=[2023, 2024, 2025, 2026])
+    fetch.add_argument("--include-live", action="store_true",
+                       help="keep in-progress games as predictable fixtures "
+                            "(the model only uses pre-game info)")
 
     train = sub.add_parser("train", help="train + evaluate the XGBoost models")
     train.add_argument("--test-season", type=int, default=2026)
@@ -42,7 +45,7 @@ def main() -> None:
         run()
     elif args.command == "fetch":
         from .fetch import main as run
-        run(args.seasons)
+        run(args.seasons, args.include_live)
     elif args.command == "train":
         from .train import main as run
         run(args.test_season)

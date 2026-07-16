@@ -73,10 +73,17 @@ def _starter_stats(seasons: list[int]) -> dict[str, tuple[float, float]]:
     return stats
 
 
-def fetch_season(season: int, starters: dict[str, tuple[float, float]]) -> pd.DataFrame:
+def fetch_season(season: int, starters: dict[str, tuple[float, float]],
+                 include_live: bool = False) -> pd.DataFrame:
     """All regular-season games for a season: finals with runs, plus any
     upcoming fixtures as 'scheduled', each with its probable-starter line
-    and ballpark factor."""
+    and ballpark factor.
+
+    In-progress games are normally skipped (no final score to train on,
+    not upcoming either). With include_live=True they're kept as
+    'scheduled' so today's already-started games can still be predicted —
+    the model only uses pre-game info, so the prediction is the same one
+    it would have made before first pitch."""
     data = _get({
         "sportId": 1, "season": season, "gameType": "R",
         "startDate": f"{season}-03-01", "endDate": f"{season}-11-15",
@@ -89,8 +96,9 @@ def fetch_season(season: int, starters: dict[str, tuple[float, float]]) -> pd.Da
             away = g["teams"]["away"]
             state = g.get("status", {}).get("abstractGameState", "")
             final = state == "Final"
-            if not final and state not in ("Preview", "Scheduled"):
-                continue  # skip in-progress / suspended
+            keep_live = include_live and state == "Live"
+            if not final and not keep_live and state not in ("Preview", "Scheduled"):
+                continue  # skip in-progress (unless asked) / suspended
 
             def starter(side):
                 name = side.get("probablePitcher", {}).get("fullName")
@@ -117,7 +125,7 @@ def fetch_season(season: int, starters: dict[str, tuple[float, float]]) -> pd.Da
     return pd.DataFrame(rows)
 
 
-def main(seasons: list[int]) -> None:
+def main(seasons: list[int], include_live: bool = False) -> None:
     print("Loading starting-pitcher stats (xFIP, K-BB%)...")
     starters = _starter_stats(seasons)
     if starters:
@@ -127,7 +135,7 @@ def main(seasons: list[int]) -> None:
     for s in seasons:
         print(f"Fetching {s} schedule + probable pitchers from MLB Stats API...")
         try:
-            frames.append(fetch_season(s, starters))
+            frames.append(fetch_season(s, starters, include_live))
         except requests.RequestException as exc:
             print(f"  warning: request failed for {s}: {exc}", file=sys.stderr)
     df = pd.concat(frames, ignore_index=True)
