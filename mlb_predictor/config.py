@@ -7,9 +7,9 @@ DATA_DIR = PROJECT_ROOT / "data"
 MODELS_DIR = PROJECT_ROOT / "models"
 MATCHES_CSV = DATA_DIR / "mlb_games.csv"
 
-# The 20 features the model trains on — the baseball analog of the MLS
-# layout: rolling batting + pitching form for each side, plus league
-# (AL/NL) standing in for conference.
+# The features the model trains on — rolling batting + pitching form for
+# each side, league (AL/NL), plus the starting-pitcher matchup and the
+# ballpark run environment (the two biggest baseball-specific drivers).
 FEATURE_COLS = [
     "home_runs_for_avg", "home_runs_against_avg", "home_batting_avg",
     "home_on_base_pct", "home_slugging_pct", "home_era", "home_whip",
@@ -17,7 +17,18 @@ FEATURE_COLS = [
     "away_runs_for_avg", "away_runs_against_avg", "away_batting_avg",
     "away_on_base_pct", "away_slugging_pct", "away_era", "away_whip",
     "away_bullpen_era", "away_win_pct", "away_league",
+    # Starting-pitcher matchup — the single biggest driver of a game.
+    # xFIP and K-BB% are among the most stable, predictive pitcher stats.
+    "home_starter_xfip", "home_starter_k_bb_pct",
+    "away_starter_xfip", "away_starter_k_bb_pct",
+    # Ballpark run environment (Coors inflates, Petco suppresses, ...).
+    "park_factor",
 ]
+
+# League-average starter stats, used to impute when a probable pitcher
+# or their season line is missing.
+LEAGUE_AVG_XFIP = 4.20
+LEAGUE_AVG_K_BB_PCT = 0.13
 
 # Rolling form window (games) feeding the *_avg / rate features.
 FORM_WINDOW = 20
@@ -67,6 +78,23 @@ TEAMS = {
 
 LEAGUE = {team: lg for team, (lg, _) in TEAMS.items()}
 DIVISION = {team: f"{lg} {div}" for team, (lg, div) in TEAMS.items()}
+
+# Ballpark run factors (home team's park), ~1.0 = neutral. Loosely based
+# on multi-year run park factors; Coors is the famous outlier. Used both
+# as a model feature and to shape the sample-data run environment.
+PARK_FACTORS = {
+    "Colorado Rockies": 1.15, "Boston Red Sox": 1.06, "Cincinnati Reds": 1.06,
+    "Kansas City Royals": 1.03, "Arizona Diamondbacks": 1.03,
+    "Baltimore Orioles": 1.02, "Texas Rangers": 1.02, "New York Yankees": 1.02,
+    "Chicago Cubs": 1.01, "Philadelphia Phillies": 1.01, "Toronto Blue Jays": 1.01,
+    "Atlanta Braves": 1.00, "Minnesota Twins": 1.00, "Washington Nationals": 1.00,
+    "Houston Astros": 1.00, "St. Louis Cardinals": 0.99, "Los Angeles Angels": 0.99,
+    "Chicago White Sox": 0.99, "Milwaukee Brewers": 0.99, "Pittsburgh Pirates": 0.98,
+    "Los Angeles Dodgers": 0.98, "New York Mets": 0.97, "Detroit Tigers": 0.97,
+    "Miami Marlins": 0.97, "Cleveland Guardians": 0.97, "Athletics": 0.96,
+    "Tampa Bay Rays": 0.95, "San Diego Padres": 0.95, "Seattle Mariners": 0.94,
+    "San Francisco Giants": 0.94,
+}
 
 
 # --- Team-name normalization ------------------------------------------

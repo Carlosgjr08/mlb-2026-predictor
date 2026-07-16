@@ -12,7 +12,7 @@ from datetime import date, timedelta
 import numpy as np
 import pandas as pd
 
-from .config import MATCHES_CSV, TEAMS
+from .config import MATCHES_CSV, PARK_FACTORS, TEAMS
 
 # (offense, run-prevention) multipliers around 1.0. Lower prevention =
 # better pitching/defense. Loose nods to recent MLB reality.
@@ -59,12 +59,34 @@ def _season_schedule(season: int, rng: np.random.Generator) -> list[tuple[date, 
     return sched
 
 
-def _simulate_game(home: str, away: str, rng: np.random.Generator) -> dict:
+def _build_rotations(rng: np.random.Generator) -> dict[str, list[tuple[float, float]]]:
+    """Five starters per team, each with (xFIP, K-BB%). A team's rotation
+    is centered on its run-prevention rating, with ace-to-backend spread."""
+    spread = np.array([-0.65, -0.25, 0.10, 0.45, 0.85])
+    rotations = {}
+    for team, (_atk, dfn) in TEAM_RATINGS.items():
+        team_xfip = 4.20 * dfn
+        starters = []
+        for off in spread:
+            xfip = float(np.clip(team_xfip + off + rng.normal(0, 0.15), 2.6, 5.8))
+            kbb = float(np.clip(0.13 + (4.20 - xfip) * 0.06 + rng.normal(0, 0.02), 0.02, 0.32))
+            starters.append((round(xfip, 2), round(kbb, 3)))
+        rotations[team] = starters
+    return rotations
+
+
+def _simulate_game(home: str, away: str, park: float,
+                   h_starter: tuple[float, float], a_starter: tuple[float, float],
+                   rng: np.random.Generator) -> dict:
     atk_h, def_h = TEAM_RATINGS[home]
     atk_a, def_a = TEAM_RATINGS[away]
+    h_xfip, _ = h_starter
+    a_xfip, _ = a_starter
 
-    mu_home = BASE_RUNS * atk_h * def_a * HOME_ADVANTAGE
-    mu_away = BASE_RUNS * atk_a * def_h
+    # Run prevention each side faces this game = 60% starter, 40% team
+    # defense/bullpen; park scales the whole run environment.
+    mu_home = BASE_RUNS * atk_h * (0.6 * a_xfip / 4.20 + 0.4 * def_a) * HOME_ADVANTAGE * park
+    mu_away = BASE_RUNS * atk_a * (0.6 * h_xfip / 4.20 + 0.4 * def_h) * park
     runs_home = int(rng.poisson(mu_home))
     runs_away = int(rng.poisson(mu_away))
     # No ties in baseball: extra innings, slight home edge.
@@ -106,13 +128,22 @@ def generate(seed: int = 26) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
     rows = []
     for season in SEASONS:
+        rotations = _build_rotations(rng)  # rosters turn over year to year
         for game_date, home, away in _season_schedule(season, rng):
             played = season < 2026 or game_date <= CUTOFF_2026
+            park = PARK_FACTORS[home]
+            h_starter = rotations[home][rng.integers(5)]
+            a_starter = rotations[away][rng.integers(5)]
+            # Starter matchup + park are known before first pitch, so they
+            # ride on every game (played or scheduled).
             row = {"date": game_date.isoformat(), "season": season,
                    "home_team": home, "away_team": away,
-                   "status": "played" if played else "scheduled"}
+                   "status": "played" if played else "scheduled",
+                   "home_starter_xfip": h_starter[0], "home_starter_k_bb_pct": h_starter[1],
+                   "away_starter_xfip": a_starter[0], "away_starter_k_bb_pct": a_starter[1],
+                   "park_factor": park}
             if played:
-                row.update(_simulate_game(home, away, rng))
+                row.update(_simulate_game(home, away, park, h_starter, a_starter, rng))
             rows.append(row)
     return pd.DataFrame(rows).sort_values(["date", "home_team"]).reset_index(drop=True)
 

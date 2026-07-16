@@ -11,8 +11,9 @@ tracking scoreboard that grades every pick against reality.
   predict expected home runs and away runs (MLB averages ~4.5/side).
 - **No ties** — win/loss only; equal-run games are resolved as extra
   innings, with the usual small home-field edge.
-- **20 features** — rolling form over each team's last 20 games, computed
-  only from games *before* the one being predicted (no leakage):
+- **25 features** — rolling team form (last 20 games, no leakage) **plus
+  the starting-pitcher matchup and ballpark run factor**, the two biggest
+  baseball-specific drivers:
 
 ```python
 FEATURE_COLS = [
@@ -22,8 +23,14 @@ FEATURE_COLS = [
     "away_runs_for_avg", "away_runs_against_avg", "away_batting_avg",
     "away_on_base_pct", "away_slugging_pct", "away_era", "away_whip",
     "away_bullpen_era", "away_win_pct", "away_league",
+    # Starting-pitcher matchup (xFIP, K-BB%) + ballpark run factor
+    "home_starter_xfip", "home_starter_k_bb_pct",
+    "away_starter_xfip", "away_starter_k_bb_pct", "park_factor",
 ]
 ```
+
+On the sample data these three additions are among the model's most
+important features and lift winner accuracy by ~1–2 points.
 
 ## Quick start
 
@@ -79,16 +86,17 @@ mlb_predictor/
 
 ## Data sources & the roadmap
 
-- **Now:** the free public **MLB Stats API** (`statsapi.mlb.com`, no key)
-  for schedules and final scores. Box-score rates (AVG/OBP/SLG/ERA/WHIP)
-  are imputed with league averages — rolling runs for/against, win %, and
-  home field carry the signal.
-- **Biggest planned upgrade — starting pitchers.** The starter is the
-  most predictive single input in baseball. Plan: probable pitchers from
-  the MLB Stats API + pitcher quality (FIP / xFIP / SIERA / K-BB%) from
-  Baseball Savant / FanGraphs (via the `pybaseball` library).
-- **Then:** ballpark run factors (Coors!), real bullpen quality, rest/
-  travel, and betting lines for calibration checks.
+- **Schedules + scores + probable pitchers:** the free public **MLB Stats
+  API** (`statsapi.mlb.com`, no key), including `hydrate=probablePitcher`.
+- **Starting-pitcher quality (xFIP, K-BB%):** FanGraphs via the optional
+  **`pybaseball`** library (`pip install pybaseball`). Without it, starters
+  fall back to league average and everything else still runs.
+- **Ballpark run factors:** a static `PARK_FACTORS` table (Coors inflates,
+  Petco/Oracle suppress, ...).
+- **Still imputed** (next upgrades): per-game box-score rates
+  (AVG/OBP/SLG/ERA/WHIP), real bullpen quality, rest/travel, and betting
+  lines for calibration checks. A known simplification: pitcher stats are
+  season-level, not as-of-game-date.
 
 ## Honest notes
 

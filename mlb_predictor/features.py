@@ -7,8 +7,9 @@ games *before* the game being featurized (no leakage).
 import numpy as np
 import pandas as pd
 
-from .config import (FEATURE_COLS, FORM_WINDOW, LEAGUE, LEAGUE_CODE,
-                     MATCHES_CSV, MIN_GAMES, normalize_team)
+from .config import (FEATURE_COLS, FORM_WINDOW, LEAGUE, LEAGUE_AVG_K_BB_PCT,
+                     LEAGUE_AVG_XFIP, LEAGUE_CODE, MATCHES_CSV, MIN_GAMES,
+                     PARK_FACTORS, normalize_team)
 
 # Per-team-per-game stats that feed the rolling averages.
 _FORM_STATS = ["runs_for", "runs_against", "batting_avg", "on_base_pct",
@@ -89,12 +90,31 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     played = df[df["status"] == "played"]
     states = _team_states(played)
 
-    # Keep only game identity + runs on each row; the per-game box-score
-    # columns were just raw material for the rolling averages, and their
-    # names would collide with the attached *_avg feature columns.
+    # Keep game identity + runs + the pre-game "point in time" features
+    # (starter matchup, park). The rolling box-score columns are dropped
+    # here — they're raw material for the averages and would collide with
+    # the attached *_avg feature names.
     keep = ["date", "season", "home_team", "away_team", "status",
-            "home_runs", "away_runs"]
-    base = df[[c for c in keep if c in df.columns]]
+            "home_runs", "away_runs",
+            "home_starter_xfip", "home_starter_k_bb_pct",
+            "away_starter_xfip", "away_starter_k_bb_pct", "park_factor"]
+    base = df[[c for c in keep if c in df.columns]].copy()
+
+    # Starter / park are known before first pitch and attach directly.
+    # Fill any missing starter line with league average; missing park with
+    # the home team's known factor (falling back to neutral 1.0).
+    starter_defaults = {
+        "home_starter_xfip": LEAGUE_AVG_XFIP, "away_starter_xfip": LEAGUE_AVG_XFIP,
+        "home_starter_k_bb_pct": LEAGUE_AVG_K_BB_PCT,
+        "away_starter_k_bb_pct": LEAGUE_AVG_K_BB_PCT,
+    }
+    for col, default in starter_defaults.items():
+        if col not in base.columns:
+            base[col] = np.nan
+        base[col] = base[col].fillna(default)
+    if "park_factor" not in base.columns:
+        base["park_factor"] = np.nan
+    base["park_factor"] = base["park_factor"].fillna(base["home_team"].map(PARK_FACTORS)).fillna(1.0)
 
     out = _attach_side(base, states, "home")
     out = _attach_side(out, states, "away")
