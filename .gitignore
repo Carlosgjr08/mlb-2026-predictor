@@ -2,4 +2,6 @@ models/
 __pycache__/
 *.pyc
 .venv/
-data/
+data/*
+# The predictions log is the permanent track record — keep it in git.
+!data/mlb_predictions_log.csv
