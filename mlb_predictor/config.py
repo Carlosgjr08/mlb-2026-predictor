@@ -23,6 +23,9 @@ FEATURE_COLS = [
     "away_starter_xfip", "away_starter_k_bb_pct",
     # Ballpark run environment (Coors inflates, Petco suppresses, ...).
     "park_factor",
+    # Schedule fatigue: days since each team's previous game (0 = second
+    # game of a doubleheader, capped at 10).
+    "home_rest_days", "away_rest_days",
 ]
 
 # League-average starter stats, used to impute when a probable pitcher

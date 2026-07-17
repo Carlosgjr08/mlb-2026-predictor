@@ -68,6 +68,9 @@ def _team_states(played: pd.DataFrame) -> pd.DataFrame:
         states[stat] = grouped[stat].transform(
             lambda s: s.rolling(FORM_WINDOW, min_periods=MIN_GAMES).mean())
     states["games_played"] = grouped.cumcount() + 1
+    # Date of the game this snapshot came from — lets the merge compute
+    # each team's rest days before the next game.
+    states["played_date"] = states["date"]
     return states.sort_values("date", kind="stable")
 
 
@@ -78,6 +81,7 @@ def _attach_side(games: pd.DataFrame, states: pd.DataFrame, side: str) -> pd.Dat
         "slugging_pct": f"{side}_slugging_pct", "era": f"{side}_era",
         "whip": f"{side}_whip", "bullpen_era": f"{side}_bullpen_era",
         "win": f"{side}_win_pct", "games_played": f"{side}_games_played",
+        "played_date": f"{side}_played_date",
     }
     return pd.merge_asof(
         games.sort_values("date", kind="stable"),
@@ -120,6 +124,9 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     out = _attach_side(out, states, "away")
     out["home_league"] = out["home_team"].map(LEAGUE).map(LEAGUE_CODE)
     out["away_league"] = out["away_team"].map(LEAGUE).map(LEAGUE_CODE)
+    for side in ("home", "away"):
+        out[f"{side}_rest_days"] = (
+            (out["date"] - out[f"{side}_played_date"]).dt.days.clip(0, 10))
 
     ready = (out["home_games_played"].fillna(0) >= MIN_GAMES) & \
             (out["away_games_played"].fillna(0) >= MIN_GAMES) & \

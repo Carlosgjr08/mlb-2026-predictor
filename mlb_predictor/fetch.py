@@ -18,6 +18,8 @@ column names ('xFIP', 'K-BB%').
 """
 
 import sys
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import requests
@@ -26,6 +28,17 @@ from .config import (LEAGUE_AVG_K_BB_PCT, LEAGUE_AVG_XFIP, MATCHES_CSV,
                      PARK_FACTORS, normalize_team)
 
 SCHEDULE = "https://statsapi.mlb.com/api/v1/schedule"
+EASTERN = ZoneInfo("America/New_York")
+
+
+def _local_date(iso_utc: str) -> str:
+    """Game date in US/Eastern. The API's gameDate is UTC, which pushes
+    every evening game onto the next calendar day."""
+    try:
+        dt = datetime.fromisoformat(str(iso_utc).replace("Z", "+00:00"))
+        return dt.astimezone(EASTERN).date().isoformat()
+    except ValueError:
+        return str(iso_utc)[:10]
 
 # League-average box-score rates used where the schedule endpoint gives
 # no per-game batting/pitching detail.
@@ -109,7 +122,7 @@ def fetch_season(season: int, starters: dict[str, tuple[float, float]],
             a_xfip, a_kbb = starter(away)
             home_name = home["team"]["name"]
             row = {
-                "date": g["gameDate"][:10], "season": season,
+                "date": _local_date(g["gameDate"]), "season": season,
                 "home_team": home_name, "away_team": away["team"]["name"],
                 "status": "played" if final else "scheduled",
                 "home_starter_xfip": h_xfip, "home_starter_k_bb_pct": h_kbb,

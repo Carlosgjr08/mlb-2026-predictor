@@ -12,7 +12,8 @@ def main() -> None:
     sub.add_parser("sample", help="generate the offline sample dataset")
 
     fetch = sub.add_parser("fetch", help="fetch real data (MLB Stats API, needs network)")
-    fetch.add_argument("--seasons", type=int, nargs="+", default=[2023, 2024, 2025, 2026])
+    fetch.add_argument("--seasons", type=int, nargs="+",
+                       default=[2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026])
     fetch.add_argument("--include-live", action="store_true",
                        help="keep in-progress games as predictable fixtures "
                             "(the model only uses pre-game info)")
@@ -25,6 +26,8 @@ def main() -> None:
     predict.add_argument("--away")
     predict.add_argument("--upcoming", action="store_true")
     predict.add_argument("--limit", type=int, default=10)
+    predict.add_argument("--date", help="only games on this date (YYYY-MM-DD), "
+                                        "with --upcoming")
 
     simulate = sub.add_parser("simulate", help="Monte Carlo the rest of the season")
     simulate.add_argument("--runs", type=int, default=5000)
@@ -54,7 +57,7 @@ def main() -> None:
         from .train import load_bundle
         bundle = load_bundle()
         if args.upcoming:
-            predict_upcoming(bundle, args.limit)
+            predict_upcoming(bundle, args.limit, args.date)
         elif args.home and args.away:
             predict_matchup(bundle, args.home, args.away)
         else:

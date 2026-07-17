@@ -86,8 +86,13 @@ def predict_matchup(bundle: dict, home: str, away: str) -> None:
     print(_format_game(predict_frame(bundle, row).iloc[0]))
 
 
-def predict_upcoming(bundle: dict, limit: int | None = None) -> pd.DataFrame:
+def predict_upcoming(bundle: dict, limit: int | None = None,
+                     date: str | None = None) -> pd.DataFrame:
     df = predict_frame(bundle, upcoming_frame())
+    if date:
+        df = df[df["date"].dt.strftime("%Y-%m-%d") == date]
+        if df.empty:
+            print(f"No scheduled games on {date}.")
     for row in (df.head(limit) if limit else df).itertuples():
         print(_format_game(row) + "\n")
     return df
