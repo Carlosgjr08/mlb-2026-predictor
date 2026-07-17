@@ -85,6 +85,20 @@ Colorado Rockies @ Los Angeles Dodgers
   most likely scores: 6-3 (3%), 5-3 (3%), 6-4 (3%)
 ```
 
+
+## 🖥️ Visual dashboard (instead of the terminal)
+
+One-time install, then one command opens a dashboard in your browser:
+
+```bash
+pip install streamlit          # once
+streamlit run dashboard.py     # opens localhost:8501 in your browser
+```
+
+Two tabs: **Picks** (choose a slate, every game sorted by confidence
+with probability bars and expected runs) and **Scoreboard** (your
+tracked record with live ✅/❌/⏳). Stop it with Ctrl+C in the terminal.
+
 ## Tracking predictions vs. reality
 
 Locks in each game's pick and most likely score before first pitch,
