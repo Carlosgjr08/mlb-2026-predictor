@@ -115,11 +115,10 @@ mlb_predictor/
 
 ## Data sources & the roadmap
 
-- **Schedules + scores + probable pitchers:** the free public **MLB Stats
-  API** (`statsapi.mlb.com`, no key), including `hydrate=probablePitcher`.
-- **Starting-pitcher quality (xFIP, K-BB%):** FanGraphs via the optional
-  **`pybaseball`** library (`pip install pybaseball`). Without it, starters
-  fall back to league average and everything else still runs.
+- **Everything from the free public MLB Stats API** (`statsapi.mlb.com`,
+  no key): schedules, scores, probable pitchers, and season pitching
+  lines from which each starter's **FIP and K-BB%** are computed.
+  (FanGraphs/pybaseball was dropped — it now 403s automated requests.)
 - **Ballpark run factors:** a static `PARK_FACTORS` table (Coors inflates,
   Petco/Oracle suppress, ...).
 - **Still imputed** (next upgrades): per-game box-score rates

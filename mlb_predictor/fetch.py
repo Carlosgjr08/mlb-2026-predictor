@@ -1,20 +1,20 @@
-"""Real data fetcher: the free public MLB Stats API (statsapi.mlb.com)
-plus starting-pitcher stats from FanGraphs (via pybaseball).
+"""Real data fetcher: everything from the free public MLB Stats API
+(statsapi.mlb.com) — no key, no scraping.
 
-- Schedule endpoint (no key): final scores, upcoming fixtures, and — with
+- Schedule endpoint: final scores, upcoming fixtures, and — with
   hydrate=probablePitcher — each game's probable starters.
-- pybaseball (optional): season xFIP and K-BB% per pitcher, joined to the
-  probable starters. Install with `pip install pybaseball`; without it,
-  starters fall back to league average and the rest still works.
+- Season pitching stats endpoint: per-pitcher K, BB, HBP, HR, IP, and
+  batters faced, from which FIP and K-BB% are computed and joined to the
+  probable starters. (FanGraphs/pybaseball was the original source, but
+  it now blocks automated requests with 403s.)
 - Ballpark run factors come from the static PARK_FACTORS table.
 
 Per-game box-score rates (AVG/OBP/SLG/ERA/WHIP) still aren't pulled and
 are imputed with league averages — rolling runs for/against, win %, the
 starter matchup, and park carry the signal.
 
-NOTE: written offline (both APIs were blocked in the build sandbox). Run
-locally and sanity-check the first response, especially the pybaseball
-column names ('xFIP', 'K-BB%').
+NOTE: written offline (the API is blocked in the build sandbox). Run
+locally and sanity-check the first response.
 """
 
 import sys
@@ -54,35 +54,53 @@ def _get(params: dict) -> dict:
     return resp.json()
 
 
-def _starter_stats(seasons: list[int]) -> dict[str, tuple[float, float]]:
-    """Map pitcher full name -> (xFIP, K-BB% as a fraction) using FanGraphs
-    season lines via pybaseball. Returns {} if pybaseball isn't installed
-    or the pull fails, in which case starters fall back to league average.
-    Season-level (not as-of-date) stats are a deliberate simplification."""
+MLB_STATS = "https://statsapi.mlb.com/api/v1/stats"
+
+
+def _innings(ip_str) -> float:
+    """MLB innings-pitched strings use .1/.2 for thirds of an inning."""
     try:
-        from pybaseball import pitching_stats
-    except ImportError:
-        print("  note: pybaseball not installed — starters imputed to league "
-              "average. `pip install pybaseball` for real pitcher data.",
-              file=sys.stderr)
-        return {}
+        whole, _, frac = str(ip_str).partition(".")
+        return int(whole or 0) + int(frac or 0) / 3
+    except ValueError:
+        return 0.0
+
+
+def _starter_stats(seasons: list[int]) -> dict[str, tuple[float, float]]:
+    """Map pitcher full name -> (FIP, K-BB% as a fraction), computed from
+    the MLB Stats API's season pitching lines (same free API as the
+    schedule — no scraping, no key).
+
+    FIP = (13*HR + 3*(BB+HBP) - 2*K) / IP + 3.10 — the defense-independent
+    'what ERA should have been'. Stored under the *_xfip feature names.
+    Season-level (not as-of-date) stats are a deliberate simplification."""
     stats: dict[str, tuple[float, float]] = {}
     for s in seasons:
         try:
-            df = pitching_stats(s, qual=1)
-        except Exception as exc:  # network/parse issues shouldn't be fatal
-            print(f"  warning: pybaseball pitching_stats({s}) failed: {exc}",
+            resp = requests.get(MLB_STATS, params={
+                "stats": "season", "group": "pitching", "season": s,
+                "sportId": 1, "playerPool": "all", "limit": 3000}, timeout=60)
+            resp.raise_for_status()
+            groups = resp.json().get("stats", [])
+        except (requests.RequestException, ValueError) as exc:
+            print(f"  warning: pitching stats failed for {s}: {exc}",
                   file=sys.stderr)
             continue
-        for row in df.itertuples():
-            name = getattr(row, "Name", None)
-            xfip = getattr(row, "xFIP", None)
-            kbb = getattr(row, "_K_BB_pct", None)  # 'K-BB%' -> sanitized attr
-            if kbb is None:
-                kbb = getattr(row, "K_BB_pct", None)
-            if name and xfip is not None:
-                frac = float(kbb) / 100 if kbb is not None else LEAGUE_AVG_K_BB_PCT
-                stats[str(name)] = (float(xfip), frac)  # latest season wins
+        for split in (groups[0].get("splits", []) if groups else []):
+            name = split.get("player", {}).get("fullName")
+            st = split.get("stat", {})
+            ip = _innings(st.get("inningsPitched", 0))
+            bf = float(st.get("battersFaced", 0) or 0)
+            if not name or ip < 10 or bf < 40:
+                continue  # too small a sample to say anything
+            k = float(st.get("strikeOuts", 0) or 0)
+            bb = float(st.get("baseOnBalls", 0) or 0)
+            hbp = float(st.get("hitByPitch", 0) or 0)
+            hr = float(st.get("homeRuns", 0) or 0)
+            fip = (13 * hr + 3 * (bb + hbp) - 2 * k) / ip + 3.10
+            fip = min(max(fip, 1.0), 8.0)
+            kbb = (k - bb) / bf
+            stats[str(name)] = (round(fip, 2), round(kbb, 3))  # latest season wins
     return stats
 
 
