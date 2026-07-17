@@ -25,7 +25,8 @@ def main() -> None:
     predict.add_argument("--home")
     predict.add_argument("--away")
     predict.add_argument("--upcoming", action="store_true")
-    predict.add_argument("--limit", type=int, default=10)
+    predict.add_argument("--limit", type=int, default=None,
+                     help="max games printed (default 10, or all with --date)")
     predict.add_argument("--date", help="only games on this date (YYYY-MM-DD), "
                                         "with --upcoming")
 
@@ -57,7 +58,8 @@ def main() -> None:
         from .train import load_bundle
         bundle = load_bundle()
         if args.upcoming:
-            predict_upcoming(bundle, args.limit, args.date)
+            limit = args.limit if args.limit is not None else (None if args.date else 10)
+            predict_upcoming(bundle, limit, args.date)
         elif args.home and args.away:
             predict_matchup(bundle, args.home, args.away)
         else:
