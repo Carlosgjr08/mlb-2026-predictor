@@ -5,6 +5,35 @@ Two XGBoost Poisson models predict each team's runs; those turn into win
 probabilities, likely scorelines, playoff-odds simulations, and a
 tracking scoreboard that grades every pick against reality.
 
+## 🚪 Getting back in (copy-paste this every time)
+
+Open Terminal, then paste these two lines:
+
+```bash
+cd ~/Downloads/mlb-2026-predictor-main
+source .venv/bin/activate
+```
+
+You're in when `(.venv)` appears at the start of your prompt. Then the
+everyday commands:
+
+```bash
+python -m mlb_predictor predict --upcoming        # predict coming games
+python -m mlb_predictor predict --home "Philadelphia Phillies" --away "New York Mets"
+python -m mlb_predictor track record              # lock in picks
+python -m mlb_predictor track result --home "Philadelphia Phillies" --away "New York Mets" --score 1-4
+python -m mlb_predictor track board               # refresh scoreboard
+python -m mlb_predictor fetch                     # update data (daily/weekly)
+python -m mlb_predictor fetch --include-live      # ...including games already started
+python -m mlb_predictor train                     # retrain after fetch
+```
+
+Done for the day? Type `deactivate` (or just close the Terminal window).
+
+> If the folder path above doesn't match where the project lives on your
+> machine, type `cd ` (with a space) and drag the project folder from
+> Finder into the Terminal window, then press Enter.
+
 ## How it works
 
 - **Runs, not goals** — two XGBoost regressors (`objective="count:poisson"`)
