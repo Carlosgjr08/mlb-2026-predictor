@@ -44,7 +44,7 @@ with tab_picks:
             "Win prob": games[["p_home_win", "p_away_win"]].max(axis=1),
             "Expected score": (games["pred_home_runs"].round(1).astype(str) + " – "
                                + games["pred_away_runs"].round(1).astype(str)),
-            "Most likely": games["top_score"] if "top_score" in games else "",
+            "Proj. total": (games["pred_home_runs"] + games["pred_away_runs"]).round(1),
         })
         view = view.sort_values("Win prob", ascending=False)
         st.dataframe(
