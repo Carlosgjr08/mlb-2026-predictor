@@ -35,6 +35,9 @@ def main() -> None:
 
     sub.add_parser("odds", help="compare model vs sportsbook odds (needs ODDS_API_KEY)")
 
+    news = sub.add_parser("team-news", help="injured-list report (free MLB Stats API)")
+    news.add_argument("--date", help="YYYY-MM-DD (default today)")
+
     track = sub.add_parser("track", help="track predictions vs. real results")
     track_sub = track.add_subparsers(dest="track_command", required=True)
     track_sub.add_parser("record", help="log predictions for upcoming games")
@@ -74,6 +77,9 @@ def main() -> None:
         from .odds import main as run
         from .train import load_bundle
         run(load_bundle())
+    elif args.command == "team-news":
+        from .team_news import main as run
+        run(args.date)
     elif args.command == "track":
         from . import track as tracker
         if args.track_command == "record":
