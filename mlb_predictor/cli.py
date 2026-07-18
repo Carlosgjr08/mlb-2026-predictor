@@ -33,6 +33,8 @@ def main() -> None:
     simulate = sub.add_parser("simulate", help="Monte Carlo the rest of the season")
     simulate.add_argument("--runs", type=int, default=5000)
 
+    sub.add_parser("odds", help="compare model vs sportsbook odds (needs ODDS_API_KEY)")
+
     track = sub.add_parser("track", help="track predictions vs. real results")
     track_sub = track.add_subparsers(dest="track_command", required=True)
     track_sub.add_parser("record", help="log predictions for upcoming games")
@@ -68,6 +70,10 @@ def main() -> None:
         from .simulate import main as run
         from .train import load_bundle
         run(load_bundle(), args.runs)
+    elif args.command == "odds":
+        from .odds import main as run
+        from .train import load_bundle
+        run(load_bundle())
     elif args.command == "track":
         from . import track as tracker
         if args.track_command == "record":
