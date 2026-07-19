@@ -82,7 +82,7 @@ def main(bundle: dict) -> None:
     preds = predict_frame(bundle, upcoming_frame())
 
     print(f"{'Game':<34}{'Model':>8}{'Market':>8}{'Edge':>7}   totals model/line")
-    shown = 0
+    shown, big = 0, 0
     for row in preds.itertuples():
         m = market.get((row.home_team, row.away_team))
         if not m:
@@ -92,14 +92,20 @@ def main(bundle: dict) -> None:
         model_total = row.pred_home_runs + row.pred_away_runs
         line = f"{m['total']:.1f}" if m["total"] else "  — "
         game = f"{row.away_team.split()[-1]} @ {row.home_team.split()[-1]}"
+        flag = "  <- BIG" if abs(edge) >= 8 else ""
         print(f"{game:<34}{model_p:>7.0%} {m['p_home']:>7.0%} {edge:>+6.1f}   "
-              f"{model_total:.1f} / {line}   ({m['books']} books)")
+              f"{model_total:.1f} / {line}   ({m['books']} books){flag}")
         shown += 1
+        big += abs(edge) >= 8
     if not shown:
         print("No overlap between the model's upcoming games and the odds feed "
               "— refetch data (`python -m mlb_predictor fetch`) and retry.")
     print("\nModel/Market = home team's win probability. Positive edge: the "
           "model likes the home side more than Vegas does.")
+    if shown:
+        print(f"{big} BIG edge(s) (>=8 pts) flagged — those usually mean the "
+              "market knows something the model can't (injury, bullpen use, "
+              "a scratch). Check `team-news` before trusting them.")
     if remaining:
         print(f"The Odds API requests remaining this month: {remaining}",
               file=sys.stderr)

@@ -5,6 +5,7 @@ import json
 
 import joblib
 import numpy as np
+import pandas as pd
 from sklearn.metrics import accuracy_score, log_loss, mean_absolute_error
 from xgboost import XGBRegressor
 
@@ -14,6 +15,12 @@ from .predict import win_probabilities
 
 MODEL_PATH = MODELS_DIR / "mlb_xgb.joblib"
 REPORT_PATH = MODELS_DIR / "mlb_eval_report.json"
+
+# Recent games count more. A game this many days old is worth half as much
+# as today's in training. Baseball rosters and form shift within a season
+# (trades, slumps, call-ups), so a ~1-season half-life keeps it current
+# without throwing away the multi-year sample.
+FORM_HALF_LIFE_DAYS = 365
 
 XGB_PARAMS = dict(
     objective="count:poisson",
@@ -28,9 +35,16 @@ XGB_PARAMS = dict(
 )
 
 
-def _fit(X, y) -> XGBRegressor:
+def _time_decay_weights(dates: pd.Series) -> np.ndarray:
+    """Exponential recency weights: newest game = 1.0, halving every
+    FORM_HALF_LIFE_DAYS."""
+    age_days = (dates.max() - dates).dt.days.to_numpy()
+    return np.power(0.5, age_days / FORM_HALF_LIFE_DAYS)
+
+
+def _fit(X, y, weights=None) -> XGBRegressor:
     model = XGBRegressor(**XGB_PARAMS)
-    model.fit(X, y)
+    model.fit(X, y, sample_weight=weights)
     return model
 
 
@@ -42,8 +56,9 @@ def main(test_season: int = 2026) -> None:
           f"evaluating on {len(test)} played {test_season} games")
 
     X_train, X_test = train[FEATURE_COLS], test[FEATURE_COLS]
-    home_model = _fit(X_train, train["home_runs"])
-    away_model = _fit(X_train, train["away_runs"])
+    w_train = _time_decay_weights(train["date"])
+    home_model = _fit(X_train, train["home_runs"], w_train)
+    away_model = _fit(X_train, train["away_runs"], w_train)
 
     report = {"train_games": int(len(train)), "test_games": int(len(test)),
               "test_season": test_season}
@@ -66,9 +81,10 @@ def main(test_season: int = 2026) -> None:
         })
 
     X_all = df[FEATURE_COLS]
+    w_all = _time_decay_weights(df["date"])
     bundle = {
-        "home_model": _fit(X_all, df["home_runs"]),
-        "away_model": _fit(X_all, df["away_runs"]),
+        "home_model": _fit(X_all, df["home_runs"], w_all),
+        "away_model": _fit(X_all, df["away_runs"], w_all),
         "feature_cols": FEATURE_COLS,
         "trained_on_games": int(len(df)),
     }

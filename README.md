@@ -99,6 +99,17 @@ Two tabs: **Picks** (choose a slate, every game sorted by confidence
 with probability bars and expected runs) and **Scoreboard** (your
 tracked record with live ✅/❌/⏳). Stop it with Ctrl+C in the terminal.
 
+## Model refinements
+
+- **Time-decay weighting** — training games are weighted by recency
+  (half-life 365 days) so recent form and current rosters outweigh stale
+  results, without discarding the multi-year sample. (No Dixon-Coles
+  here — baseball has no draws, so that soccer fix doesn't apply.)
+- **Big-edge flagging** — `odds` marks any game where the model and
+  market disagree by 8+ points. Large gaps usually mean the book knows
+  something the model can't (injury, bullpen fatigue, a late scratch) —
+  check `team-news` before trusting them.
+
 ## Tracking predictions vs. reality
 
 Locks in each game's pick and most likely score before first pitch,
