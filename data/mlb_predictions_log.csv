@@ -29,3 +29,19 @@ date,home_team,away_team,pred_home_runs,pred_away_runs,p_home_win,p_away_win,pre
 2026-07-18,Philadelphia Phillies,New York Mets,5.23,4.05,0.65,0.35,Philadelphia Phillies,5-4,6.0,1.0,Philadelphia Phillies,1.0,0.0
 2026-07-18,Seattle Mariners,San Francisco Giants,4.16,3.77,0.56,0.44,Seattle Mariners,4-3,4.0,3.0,Seattle Mariners,1.0,1.0
 2026-07-18,Toronto Blue Jays,Chicago White Sox,4.15,5.56,0.33,0.67,Chicago White Sox,4-5,1.0,0.0,Toronto Blue Jays,0.0,0.0
+2026-07-19,Arizona Diamondbacks,St. Louis Cardinals,4.59,4.5,0.52,0.48,Arizona Diamondbacks,5-4,,,,,
+2026-07-19,Athletics,Washington Nationals,3.97,5.41,0.33,0.67,Washington Nationals,3-5,,,,,
+2026-07-19,Atlanta Braves,Texas Rangers,4.6,4.62,0.5,0.5,Atlanta Braves,5-4,,,,,
+2026-07-19,Boston Red Sox,Tampa Bay Rays,4.42,4.6,0.48,0.52,Tampa Bay Rays,4-5,,,,,
+2026-07-19,Chicago Cubs,Minnesota Twins,4.98,4.28,0.6,0.4,Chicago Cubs,5-4,,,,,
+2026-07-19,Cleveland Guardians,Pittsburgh Pirates,3.76,4.38,0.42,0.58,Pittsburgh Pirates,3-4,,,,,
+2026-07-19,Colorado Rockies,Cincinnati Reds,6.26,5.48,0.59,0.41,Colorado Rockies,6-5,,,,,
+2026-07-19,Houston Astros,Baltimore Orioles,4.44,4.71,0.47,0.53,Baltimore Orioles,4-5,,,,,
+2026-07-19,Kansas City Royals,San Diego Padres,5.08,4.98,0.52,0.48,Kansas City Royals,5-4,,,,,
+2026-07-19,Los Angeles Angels,Detroit Tigers,3.6,5.05,0.32,0.68,Detroit Tigers,3-5,,,,,
+2026-07-19,Milwaukee Brewers,Miami Marlins,4.35,4.61,0.47,0.53,Miami Marlins,4-5,,,,,
+2026-07-19,New York Yankees,Los Angeles Dodgers,4.06,3.98,0.52,0.48,New York Yankees,4-3,,,,,
+2026-07-19,New York Yankees,Los Angeles Dodgers,4.36,4.69,0.46,0.54,Los Angeles Dodgers,4-5,,,,,
+2026-07-19,Philadelphia Phillies,New York Mets,4.6,4.32,0.54,0.46,Philadelphia Phillies,4-3,,,,,
+2026-07-19,Seattle Mariners,San Francisco Giants,4.33,3.7,0.59,0.41,Seattle Mariners,4-3,,,,,
+2026-07-19,Toronto Blue Jays,Chicago White Sox,3.75,5.13,0.33,0.67,Chicago White Sox,3-5,,,,,
