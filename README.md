@@ -86,6 +86,22 @@ Colorado Rockies @ Los Angeles Dodgers
 ```
 
 
+## ⚡ One-command daily run
+
+Instead of typing fetch → train → predict every day, run the whole thing
+with one line (it catches up on results, retrains, and prints the picks):
+
+```bash
+bash ~/Downloads/mlb-2026-predictor-main/run.sh tomorrow
+```
+
+- `run.sh` (no argument) → every upcoming game
+- `run.sh today` → just today's slate
+- `run.sh tomorrow` → just tomorrow's (it figures out the date for you)
+- `run.sh 2026-07-25` → any specific date
+
+Add `python3 -m mlb_predictor odds` after for the model-vs-Vegas table.
+
 ## 🖥️ Visual dashboard (instead of the terminal)
 
 One-time install, then one command opens a dashboard in your browser:
