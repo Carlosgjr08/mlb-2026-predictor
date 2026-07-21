@@ -53,10 +53,25 @@ date,home_team,away_team,pred_home_runs,pred_away_runs,p_home_win,p_away_win,pre
 2026-07-20,Colorado Rockies,Washington Nationals,5.48,6.03,0.44,0.56,Washington Nationals,5-6,3.0,7.0,Washington Nationals,1.0,0.0
 2026-07-20,Houston Astros,Miami Marlins,4.5,4.75,0.47,0.53,Miami Marlins,4-5,8.0,5.0,Houston Astros,0.0,0.0
 2026-07-20,Kansas City Royals,San Francisco Giants,4.64,5.13,0.44,0.56,San Francisco Giants,4-5,4.0,3.0,Kansas City Royals,0.0,0.0
-2026-07-20,Los Angeles Angels,St. Louis Cardinals,4.19,4.49,0.47,0.53,St. Louis Cardinals,3-4,3,2,Los Angeles Angels,0,0
+2026-07-20,Los Angeles Angels,St. Louis Cardinals,4.19,4.49,0.47,0.53,St. Louis Cardinals,3-4,3.0,2.0,Los Angeles Angels,0.0,0.0
 2026-07-20,Milwaukee Brewers,New York Mets,5.02,3.71,0.67,0.33,Milwaukee Brewers,5-3,8.0,3.0,Milwaukee Brewers,1.0,0.0
 2026-07-20,New York Yankees,Pittsburgh Pirates,4.05,4.85,0.4,0.6,Pittsburgh Pirates,3-4,8.0,5.0,New York Yankees,0.0,0.0
 2026-07-20,Philadelphia Phillies,Los Angeles Dodgers,4.53,4.04,0.57,0.43,Philadelphia Phillies,4-3,10.0,7.0,Philadelphia Phillies,1.0,0.0
 2026-07-20,Seattle Mariners,Cincinnati Reds,4.37,3.78,0.59,0.41,Seattle Mariners,4-3,8.0,0.0,Seattle Mariners,1.0,0.0
 2026-07-20,Texas Rangers,Chicago White Sox,4.61,4.73,0.49,0.51,Chicago White Sox,4-5,3.0,10.0,Chicago White Sox,1.0,0.0
 2026-07-20,Toronto Blue Jays,Tampa Bay Rays,4.59,3.91,0.6,0.4,Toronto Blue Jays,4-3,1.0,7.0,Tampa Bay Rays,0.0,0.0
+2026-07-21,Arizona Diamondbacks,Athletics,4.89,4.14,0.6,0.4,Arizona Diamondbacks,5-4,,,,,
+2026-07-21,Atlanta Braves,San Diego Padres,4.97,4.18,0.61,0.39,Atlanta Braves,5-4,,,,,
+2026-07-21,Boston Red Sox,Baltimore Orioles,4.82,4.47,0.55,0.45,Boston Red Sox,5-4,,,,,
+2026-07-21,Chicago Cubs,Detroit Tigers,4.72,4.79,0.499,0.501,Detroit Tigers,4-5,,,,,
+2026-07-21,Cleveland Guardians,Minnesota Twins,4.41,4.13,0.54,0.46,Cleveland Guardians,4-3,,,,,
+2026-07-21,Colorado Rockies,Washington Nationals,5.36,5.88,0.44,0.56,Washington Nationals,5-6,,,,,
+2026-07-21,Houston Astros,Miami Marlins,4.67,4.89,0.48,0.52,Miami Marlins,4-5,,,,,
+2026-07-21,Kansas City Royals,San Francisco Giants,4.72,5.17,0.45,0.55,San Francisco Giants,4-5,,,,,
+2026-07-21,Los Angeles Angels,St. Louis Cardinals,4.28,4.51,0.48,0.52,St. Louis Cardinals,3-4,,,,,
+2026-07-21,Milwaukee Brewers,New York Mets,4.57,4.16,0.56,0.44,Milwaukee Brewers,4-3,,,,,
+2026-07-21,New York Yankees,Pittsburgh Pirates,4.62,4.91,0.47,0.53,Pittsburgh Pirates,4-5,,,,,
+2026-07-21,Philadelphia Phillies,Los Angeles Dodgers,4.81,4.06,0.6,0.4,Philadelphia Phillies,4-3,,,,,
+2026-07-21,Seattle Mariners,Cincinnati Reds,4.05,3.91,0.53,0.47,Seattle Mariners,4-3,,,,,
+2026-07-21,Texas Rangers,Chicago White Sox,4.51,5.64,0.37,0.63,Chicago White Sox,4-5,,,,,
+2026-07-21,Toronto Blue Jays,Tampa Bay Rays,4.06,4.41,0.46,0.54,Tampa Bay Rays,3-4,,,,,
