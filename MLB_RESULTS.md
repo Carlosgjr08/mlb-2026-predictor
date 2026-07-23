@@ -1,6 +1,6 @@
 # ⚾ MLB 2026 — Model vs. Reality
 
-**Winner record:** 33 / 74 correct (45%)  ·  **Exact scores nailed:** 1 / 74
+**Winner record:** 43 / 89 correct (48%)  ·  **Exact scores nailed:** 2 / 89
 
 > Picking the winning team is where the model has an edge. Exact run totals are a long shot for any model — tracked here for fun.
 
@@ -69,7 +69,7 @@
 | 2026-07-20 | Tampa Bay Rays @ Toronto Blue Jays | **Toronto Blue Jays** | 🟢 Strong | 4-3 | 8.5 | 1-7 | ❌ | ❌ |
 | 2026-07-21 | Athletics @ Arizona Diamondbacks | **Arizona Diamondbacks** | 🟢 Strong | 5-4 | 9.0 | 6-5 | ✅ | ❌ |
 | 2026-07-21 | San Diego Padres @ Atlanta Braves | **Atlanta Braves** | 🟢 Strong | 5-4 | 9.1 | 3-8 | ❌ | ❌ |
-| 2026-07-21 | Baltimore Orioles @ Boston Red Sox | **Boston Red Sox** | 🟡 Lean | 5-4 | 9.3 | ⏳ | ⏳ | ⏳ |
+| 2026-07-21 | Baltimore Orioles @ Boston Red Sox | **Boston Red Sox** | 🟡 Lean | 5-4 | 9.3 | 6-3 | ✅ | ❌ |
 | 2026-07-21 | Detroit Tigers @ Chicago Cubs | **Detroit Tigers** | 🔴 Toss-up | 4-5 | 9.5 | 11-2 | ❌ | ❌ |
 | 2026-07-21 | Minnesota Twins @ Cleveland Guardians | **Cleveland Guardians** | 🟡 Lean | 4-3 | 8.5 | 5-2 | ✅ | ❌ |
 | 2026-07-21 | Washington Nationals @ Colorado Rockies | **Washington Nationals** | 🟡 Lean | 5-6 | 11.2 | 8-7 | ❌ | ❌ |
@@ -77,25 +77,25 @@
 | 2026-07-21 | San Francisco Giants @ Kansas City Royals | **San Francisco Giants** | 🟡 Lean | 4-5 | 9.9 | 3-2 | ❌ | ❌ |
 | 2026-07-21 | St. Louis Cardinals @ Los Angeles Angels | **St. Louis Cardinals** | 🔴 Toss-up | 3-4 | 8.8 | 5-1 | ❌ | ❌ |
 | 2026-07-21 | New York Mets @ Milwaukee Brewers | **Milwaukee Brewers** | 🟡 Lean | 4-3 | 8.7 | 0-4 | ❌ | ❌ |
-| 2026-07-21 | Pittsburgh Pirates @ New York Yankees | **Pittsburgh Pirates** | 🟡 Lean | 4-5 | 9.5 | ⏳ | ⏳ | ⏳ |
+| 2026-07-21 | Pittsburgh Pirates @ New York Yankees | **Pittsburgh Pirates** | 🟡 Lean | 4-5 | 9.5 | 3-5 | ✅ | ❌ |
 | 2026-07-21 | Los Angeles Dodgers @ Philadelphia Phillies | **Philadelphia Phillies** | 🟢 Strong | 4-3 | 8.9 | 1-2 | ❌ | ❌ |
 | 2026-07-21 | Cincinnati Reds @ Seattle Mariners | **Seattle Mariners** | 🟡 Lean | 4-3 | 8.0 | 2-4 | ❌ | ❌ |
 | 2026-07-21 | Chicago White Sox @ Texas Rangers | **Chicago White Sox** | 🟢 Strong | 4-5 | 10.1 | 10-0 | ❌ | ❌ |
 | 2026-07-21 | Tampa Bay Rays @ Toronto Blue Jays | **Tampa Bay Rays** | 🟡 Lean | 3-4 | 8.5 | 2-12 | ✅ | ❌ |
-| 2026-07-22 | Athletics @ Arizona Diamondbacks | **Arizona Diamondbacks** | 🟢 Strong | 5-4 | 9.2 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | San Diego Padres @ Atlanta Braves | **Atlanta Braves** | 🟡 Lean | 5-4 | 9.3 | ⏳ | ⏳ | ⏳ |
+| 2026-07-22 | Athletics @ Arizona Diamondbacks | **Arizona Diamondbacks** | 🟢 Strong | 5-4 | 9.2 | 15-5 | ✅ | ❌ |
+| 2026-07-22 | San Diego Padres @ Atlanta Braves | **Atlanta Braves** | 🟡 Lean | 5-4 | 9.3 | 7-6 | ✅ | ❌ |
 | 2026-07-22 | Baltimore Orioles @ Boston Red Sox | **Boston Red Sox** | 🔴 Toss-up | 5-4 | 9.2 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Detroit Tigers @ Chicago Cubs | **Detroit Tigers** | 🔴 Toss-up | 4-5 | 9.6 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Minnesota Twins @ Cleveland Guardians | **Cleveland Guardians** | 🟡 Lean | 4-3 | 8.7 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Washington Nationals @ Colorado Rockies | **Washington Nationals** | 🟢 Strong | 5-6 | 11.4 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Miami Marlins @ Houston Astros | **Miami Marlins** | 🔴 Toss-up | 4-5 | 9.2 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | San Francisco Giants @ Kansas City Royals | **San Francisco Giants** | 🟡 Lean | 4-5 | 9.5 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | St. Louis Cardinals @ Los Angeles Angels | **Los Angeles Angels** | 🔴 Toss-up | 4-3 | 8.4 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | New York Mets @ Milwaukee Brewers | **Milwaukee Brewers** | 🟢 Strong | 4-3 | 8.2 | ⏳ | ⏳ | ⏳ |
+| 2026-07-22 | Detroit Tigers @ Chicago Cubs | **Detroit Tigers** | 🔴 Toss-up | 4-5 | 9.6 | 1-5 | ✅ | ❌ |
+| 2026-07-22 | Minnesota Twins @ Cleveland Guardians | **Cleveland Guardians** | 🟡 Lean | 4-3 | 8.7 | 6-10 | ❌ | ❌ |
+| 2026-07-22 | Washington Nationals @ Colorado Rockies | **Washington Nationals** | 🟢 Strong | 5-6 | 11.4 | 0-8 | ✅ | ❌ |
+| 2026-07-22 | Miami Marlins @ Houston Astros | **Miami Marlins** | 🔴 Toss-up | 4-5 | 9.2 | 5-2 | ❌ | ❌ |
+| 2026-07-22 | San Francisco Giants @ Kansas City Royals | **San Francisco Giants** | 🟡 Lean | 4-5 | 9.5 | 5-4 | ❌ | ❌ |
+| 2026-07-22 | St. Louis Cardinals @ Los Angeles Angels | **Los Angeles Angels** | 🔴 Toss-up | 4-3 | 8.4 | 0-1 | ❌ | ❌ |
+| 2026-07-22 | New York Mets @ Milwaukee Brewers | **Milwaukee Brewers** | 🟢 Strong | 4-3 | 8.2 | 4-3 | ✅ | ✅ |
 | 2026-07-22 | Pittsburgh Pirates @ New York Yankees | **Pittsburgh Pirates** | 🔴 Toss-up | 4-5 | 9.4 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Los Angeles Dodgers @ Philadelphia Phillies | **Los Angeles Dodgers** | 🟡 Lean | 4-5 | 9.6 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Cincinnati Reds @ Seattle Mariners | **Seattle Mariners** | 🟢 Strong | 4-3 | 8.4 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Chicago White Sox @ Texas Rangers | **Chicago White Sox** | 🟡 Lean | 4-5 | 9.6 | ⏳ | ⏳ | ⏳ |
-| 2026-07-22 | Tampa Bay Rays @ Toronto Blue Jays | **Tampa Bay Rays** | 🔴 Toss-up | 4-5 | 9.1 | ⏳ | ⏳ | ⏳ |
+| 2026-07-22 | Los Angeles Dodgers @ Philadelphia Phillies | **Los Angeles Dodgers** | 🟡 Lean | 4-5 | 9.6 | 5-9 | ✅ | ❌ |
+| 2026-07-22 | Cincinnati Reds @ Seattle Mariners | **Seattle Mariners** | 🟢 Strong | 4-3 | 8.4 | 3-5 | ❌ | ❌ |
+| 2026-07-22 | Chicago White Sox @ Texas Rangers | **Chicago White Sox** | 🟡 Lean | 4-5 | 9.6 | 2-4 | ✅ | ❌ |
+| 2026-07-22 | Tampa Bay Rays @ Toronto Blue Jays | **Tampa Bay Rays** | 🔴 Toss-up | 4-5 | 9.1 | 2-4 | ✅ | ❌ |
 
-_Last updated 2026-07-22. Generated by `python -m mlb_predictor track board`._
+_Last updated 2026-07-23. Generated by `python -m mlb_predictor track board`._
